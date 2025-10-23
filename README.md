@@ -1,22 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SQLGuru - Revolutionary Database Learning Platform
 
-## Getting Started
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.0-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.0-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-Animation-purple?style=flat-square&logo=framer)](https://www.framer.com/motion/)
 
-First, run the development server:
+## 🎯 About SQLGuru
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+SQLGuru is revolutionizing database education in India through AI-powered interactive learning. Our platform addresses the critical database skills crisis by providing comprehensive, hands-on SQL training with real-time feedback and personalized learning paths.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Live Demo
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Production**: [Coming Soon - Deploy with Vercel]
+- **POC Demo**: [sql-theta.vercel.app/landing](https://sql-theta.vercel.app/landing)
+
+## ✨ Key Features
+
+### 🎓 **Interactive Learning**
+- Real-time SQL query execution and feedback
+- AI-powered personalized learning paths
+- Hands-on practice with real databases
+- Interactive code editor with syntax highlighting
+
+### 📊 **Comprehensive Curriculum**
+- Beginner to advanced SQL concepts
+- Database design and optimization
+- Industry-specific use cases
+- Certification programs
+
+### 🎯 **Target Impact**
+- **35% improvement** in placement rates
+- **₹60,000 Cr** economic value creation
+- **500K+ learners** by 2028
+- **Pan-India expansion** across 1000+ institutions
+
+## 🛠️ Development Setup
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- Git
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/[YOUR_USERNAME]/sqlguru.git
+   cd sqlguru
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Run development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open in browser**
+   ```
+   http://localhost:3000
+   ```
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
