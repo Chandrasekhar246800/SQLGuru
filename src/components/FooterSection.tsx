@@ -177,14 +177,6 @@ export default function FooterSection() {
                 </a>
               ))}
             </div>
-
-            {/* Contact Info */}
-            <div className="text-slate-400 text-sm">
-              <div className="flex items-center gap-2">
-                <span>📍</span>
-                <span>Bangalore, India</span>
-              </div>
-            </div>
           </div>
         </div>
 

@@ -1,4 +1,86 @@
+'use client'
+
+import { useState } from 'react'
+
 export default function TeamSection() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+  
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+  
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+    
+    // Clear error when user starts typing
+    if (errors[name as keyof typeof errors]) {
+      setErrors(prev => ({ ...prev, [name]: '' }))
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // Validate form
+    const newErrors = {
+      name: '',
+      email: '',
+      message: ''
+    }
+    
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required'
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required'
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = 'Please enter a valid email address'
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required'
+    }
+    
+    // If there are errors, set them and return
+    if (newErrors.name || newErrors.email || newErrors.message) {
+      setErrors(newErrors)
+      return
+    }
+    
+    // Simulate form submission
+    setIsSubmitting(true)
+    
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false)
+      setSubmitSuccess(true)
+      
+      // Reset form
+      setFormData({ name: '', email: '', message: '' })
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setSubmitSuccess(false)
+      }, 5000)
+    }, 1500)
+  }
+
   return (
     <section id="team" className="py-24 bg-gradient-to-b from-slate-900 via-indigo-900 to-purple-900 relative overflow-hidden">
       {/* Background Decorative Elements */}
@@ -8,309 +90,181 @@ export default function TeamSection() {
         <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-blue-500/10 rounded-full blur-lg animate-pulse" style={{animationDelay: '1s'}}></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-20">
-          <div className="text-6xl mb-6">👥</div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Meet the SQLGuru Team
-            </span>
-          </h2>
-          <p className="text-xl md:text-2xl text-slate-300 max-w-5xl mx-auto leading-relaxed">
-            Passionate experts dedicated to revolutionizing database education across India.
-          </p>
-        </div>
-
-        {/* Leadership Team */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-white mb-4">Leadership Team</h3>
-            <p className="text-lg text-slate-300">Driving innovation and strategic vision</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Rajesh Kumar",
-                role: "Founder & CEO",
-                avatar: "👨‍💼",
-                background: "15+ years in EdTech",
-                education: "IIT Delhi, Stanford MBA",
-                expertise: ["Product Strategy", "Team Leadership", "Investor Relations"],
-                achievements: "Previously scaled 2 EdTech startups to ₹100Cr+ valuations",
-                color: "from-blue-500 to-indigo-500",
-                bgColor: "from-blue-900/30 to-indigo-900/20"
-              },
-              {
-                name: "Dr. Priya Sharma",
-                role: "Chief Technology Officer", 
-                avatar: "👩‍💻",
-                background: "AI/ML Research Expert",
-                education: "IISc Bangalore, PhD AI",
-                expertise: ["Machine Learning", "System Architecture", "Data Science"],
-                achievements: "Published 25+ papers, Former Google AI researcher",
-                color: "from-purple-500 to-pink-500",
-                bgColor: "from-purple-900/30 to-pink-900/20"
-              },
-              {
-                name: "Arjun Patel",
-                role: "Chief Marketing Officer",
-                avatar: "👨‍🎨", 
-                background: "Growth & Marketing",
-                education: "ISB Hyderabad, IIT Bombay",
-                expertise: ["Digital Marketing", "Brand Strategy", "Growth Hacking"],
-                achievements: "Scaled user base from 0 to 1M+ at previous startups",
-                color: "from-emerald-500 to-teal-500",
-                bgColor: "from-emerald-900/30 to-teal-900/20"
-              }
-            ].map((leader, index) => (
-              <div key={index} className={`bg-gradient-to-br ${leader.bgColor} backdrop-blur-sm border border-white/20 rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 group hover:scale-105`}>
-                {/* Avatar and Basic Info */}
-                <div className="text-center mb-6">
-                  <div className={`w-24 h-24 bg-gradient-to-r ${leader.color} rounded-full flex items-center justify-center text-4xl mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300 shadow-lg`}>
-                    {leader.avatar}
-                  </div>
-                  <h4 className="text-xl font-bold text-white mb-2 group-hover:text-indigo-200 transition-colors duration-300">
-                    {leader.name}
-                  </h4>
-                  <div className={`inline-block px-3 py-1 bg-gradient-to-r ${leader.color} rounded-full text-white text-sm font-medium mb-4`}>
-                    {leader.role}
-                  </div>
-                  <div className="text-sm text-slate-300 mb-2">{leader.background}</div>
-                  <div className="text-xs text-slate-400">{leader.education}</div>
-                </div>
-
-                {/* Expertise */}
-                <div className="mb-6">
-                  <div className="text-sm font-semibold text-white mb-3">Core Expertise</div>
-                  <div className="flex flex-wrap gap-2">
-                    {leader.expertise.map((skill, skillIndex) => (
-                      <span key={skillIndex} className="px-2 py-1 bg-white/10 backdrop-blur-sm text-xs text-slate-300 rounded-lg border border-white/20 group-hover:bg-white/20 transition-all duration-300">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Key Achievement */}
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 group-hover:bg-white/10 transition-all duration-300">
-                  <div className="text-xs text-slate-400 mb-2">Key Achievement</div>
-                  <div className="text-sm text-slate-300 leading-relaxed">
-                    {leader.achievements}
-                  </div>
-                </div>
+      <div className="max-w-4xl mx-auto px-6 relative z-10">
+        {/* Success Message */}
+        {submitSuccess && (
+          <div className="mb-8 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-2 border-green-400/50 rounded-2xl p-6 backdrop-blur-sm animate-[fadeIn_0.5s_ease-in-out]">
+            <div className="flex items-center gap-4">
+              <div className="flex-shrink-0">
+                <svg className="w-12 h-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Extended Team */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-white mb-4">Core Team</h3>
-            <p className="text-lg text-slate-300">Specialists driving product excellence</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                name: "Vikram Singh",
-                role: "Lead Backend Developer",
-                avatar: "👨‍💻",
-                experience: "7+ years",
-                specialty: "Scalable Systems",
-                color: "from-orange-500 to-red-500"
-              },
-              {
-                name: "Sneha Reddy", 
-                role: "UX/UI Design Lead",
-                avatar: "👩‍🎨",
-                experience: "6+ years",
-                specialty: "User Experience",
-                color: "from-pink-500 to-rose-500"
-              },
-              {
-                name: "Amit Gupta",
-                role: "Data Scientist",
-                avatar: "👨‍🔬",
-                experience: "8+ years", 
-                specialty: "ML Algorithms",
-                color: "from-cyan-500 to-blue-500"
-              },
-              {
-                name: "Kavya Nair",
-                role: "Content Strategist",
-                avatar: "👩‍📚",
-                experience: "5+ years",
-                specialty: "Educational Content",
-                color: "from-violet-500 to-purple-500"
-              }
-            ].map((member, index) => (
-              <div key={index} className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-500 group hover:scale-105">
-                <div className={`w-16 h-16 bg-gradient-to-r ${member.color} rounded-full flex items-center justify-center text-2xl mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300 shadow-lg`}>
-                  {member.avatar}
-                </div>
-                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-indigo-200 transition-colors duration-300">
-                  {member.name}
-                </h4>
-                <div className="text-sm text-slate-300 mb-2">{member.role}</div>
-                <div className="text-xs text-slate-400 mb-3">{member.experience}</div>
-                <div className={`inline-block px-3 py-1 bg-gradient-to-r ${member.color} rounded-full text-white text-xs font-medium`}>
-                  {member.specialty}
-                </div>
+              <div>
+                <h3 className="text-2xl font-bold text-white mb-1">Thank you for reaching out!</h3>
+                <p className="text-green-200">We'll be in touch soon. 🎉</p>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Advisory Board */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-white mb-4">Advisory Board</h3>
-            <p className="text-lg text-slate-300">Industry veterans guiding our strategic direction</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Prof. Suresh Chand",
-                role: "Education Technology Advisor",
-                avatar: "👨‍🏫",
-                background: "Former IIT Professor",
-                expertise: "EdTech Innovation",
-                color: "from-emerald-500 to-green-500",
-                bgColor: "from-emerald-900/30 to-green-900/20"
-              },
-              {
-                name: "Ms. Nandini Joshi",
-                role: "Industry Relations Advisor", 
-                avatar: "👩‍💼",
-                background: "Ex-Microsoft, TCS",
-                expertise: "Corporate Partnerships",
-                color: "from-blue-500 to-indigo-500",
-                bgColor: "from-blue-900/30 to-indigo-900/20"
-              },
-              {
-                name: "Dr. Karthik Rao",
-                role: "AI Strategy Advisor",
-                avatar: "👨‍🔬",
-                background: "AI Research Pioneer",
-                expertise: "Machine Learning",
-                color: "from-purple-500 to-violet-500",
-                bgColor: "from-purple-900/30 to-violet-900/20"
-              }
-            ].map((advisor, index) => (
-              <div key={index} className={`bg-gradient-to-br ${advisor.bgColor} backdrop-blur-sm border border-white/20 rounded-2xl p-6 hover:shadow-xl transition-all duration-500 group hover:scale-105`}>
-                <div className="flex items-center gap-4 mb-4">
-                  <div className={`w-14 h-14 bg-gradient-to-r ${advisor.color} rounded-xl flex items-center justify-center text-2xl group-hover:rotate-12 transition-transform duration-300 shadow-lg`}>
-                    {advisor.avatar}
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-bold text-white group-hover:text-indigo-200 transition-colors duration-300">
-                      {advisor.name}
-                    </h4>
-                    <div className="text-sm text-slate-300">{advisor.role}</div>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="text-sm text-slate-400">
-                    <span className="font-medium">Background:</span> {advisor.background}
-                  </div>
-                  <div className="text-sm text-slate-400">
-                    <span className="font-medium">Specialty:</span> {advisor.expertise}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Team Culture & Values */}
-        <div className="mb-20">
-          <div className="bg-gradient-to-br from-indigo-900/30 to-purple-900/20 backdrop-blur-sm border border-indigo-400/30 rounded-3xl p-8 lg:p-12">
-            <div className="text-center mb-12">
-              <div className="text-5xl mb-4">🌟</div>
-              <h3 className="text-3xl font-bold text-white mb-4">Our Culture & Values</h3>
-              <p className="text-lg text-slate-300">The principles that drive our mission</p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  icon: "🎯",
-                  title: "Impact First",
-                  description: "Every decision focuses on student success and educational outcomes"
-                },
-                {
-                  icon: "🚀",
-                  title: "Innovation Drive", 
-                  description: "Continuously pushing boundaries with cutting-edge technology"
-                },
-                {
-                  icon: "🤝",
-                  title: "Collaborative Spirit",
-                  description: "Diverse perspectives creating stronger solutions together"
-                },
-                {
-                  icon: "📈",
-                  title: "Growth Mindset",
-                  description: "Learning, adapting, and improving with every challenge"
-                }
-              ].map((value, index) => (
-                <div key={index} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300 group">
-                  <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                    {value.icon}
-                  </div>
-                  <h4 className="text-lg font-bold text-white mb-3 group-hover:text-indigo-200 transition-colors duration-300">
-                    {value.title}
-                  </h4>
-                  <p className="text-sm text-slate-300 leading-relaxed group-hover:text-slate-200 transition-colors duration-300">
-                    {value.description}
-                  </p>
-                </div>
-              ))}
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Join the Team CTA */}
-        <div className="text-center">
-          <div className="bg-gradient-to-r from-indigo-600/20 to-purple-600/20 backdrop-blur-sm border border-indigo-400/30 rounded-3xl p-8 lg:p-12 max-w-5xl mx-auto hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500">
-            <div className="text-6xl mb-6">🚀</div>
-            <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Join Our Mission to Transform Education
-            </h3>
-            <p className="text-xl text-slate-300 mb-8 leading-relaxed max-w-3xl mx-auto">
-              We're actively hiring passionate individuals who want to make a real impact on database education. 
-              Come build the future of learning with us!
+        {/* Contact Form Card */}
+        <div className="bg-gradient-to-br from-slate-800/50 to-indigo-900/30 backdrop-blur-xl border border-indigo-400/20 rounded-3xl p-8 md:p-12 shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500">
+          
+          {/* Section Header */}
+          <div className="text-center mb-10">
+            <div className="inline-block mb-4">
+              <div className="text-6xl mb-2">�</div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Contact SQLGuru
+              </span>
+            </h2>
+            <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+              Questions, suggestions, or collaboration ideas? We'd love to hear from you. Fill out this quick form and our team will get back to you soon.
             </p>
-            
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
-              <button className="px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-full text-lg shadow-2xl hover:shadow-indigo-500/25 hover:scale-105 transition-all duration-300 flex items-center gap-3 min-w-[280px] justify-center">
-                <span>💼</span> View Open Positions
-              </button>
-              <button className="px-8 py-4 border-2 border-indigo-400 text-indigo-400 font-semibold rounded-full hover:bg-indigo-400 hover:text-slate-900 transition-all duration-300 flex items-center gap-3 min-w-[220px] justify-center backdrop-blur-sm bg-white/5">
-                <span>📧</span> Contact Us
-              </button>
+          </div>
+
+          {/* Contact Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Field */}
+            <div>
+              <label htmlFor="name" className="block text-sm font-semibold text-slate-200 mb-2">
+                Your Name <span className="text-red-400">*</span>
+              </label>
+              <input 
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className={`w-full px-6 py-4 bg-slate-900/50 border ${
+                  errors.name ? 'border-red-500 focus:ring-red-500' : 'border-slate-700 focus:ring-indigo-500'
+                } rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
+                placeholder="Enter your full name"
+              />
+              {errors.name && (
+                <p className="mt-2 text-sm text-red-400 flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  {errors.name}
+                </p>
+              )}
             </div>
 
-            <div className="flex flex-wrap justify-center items-center gap-8 text-sm text-slate-400">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-indigo-400 rounded-full animate-pulse"></div>
-                <span>Remote-First Culture</span>
-              </div>
-              <div className="hidden sm:block">•</div>
-              <div className="flex items-center gap-2">
-                <span>🏆</span>
-                <span>Competitive Equity Package</span>
-              </div>
-              <div className="hidden sm:block">•</div>
-              <div className="flex items-center gap-2">
-                <span>🌱</span>
-                <span>Learning & Growth Budget</span>
-              </div>
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-semibold text-slate-200 mb-2">
+                Email Address <span className="text-red-400">*</span>
+              </label>
+              <input 
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={`w-full px-6 py-4 bg-slate-900/50 border ${
+                  errors.email ? 'border-red-500 focus:ring-red-500' : 'border-slate-700 focus:ring-indigo-500'
+                } rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
+                placeholder="you@example.com"
+              />
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-400 flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  {errors.email}
+                </p>
+              )}
+            </div>
+
+            {/* Message Field */}
+            <div>
+              <label htmlFor="message" className="block text-sm font-semibold text-slate-200 mb-2">
+                Your Message <span className="text-red-400">*</span>
+              </label>
+              <textarea 
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                rows={6}
+                className={`w-full px-6 py-4 bg-slate-900/50 border ${
+                  errors.message ? 'border-red-500 focus:ring-red-500' : 'border-slate-700 focus:ring-indigo-500'
+                } rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all resize-none`}
+                placeholder="Tell us how we can help you..."
+              ></textarea>
+              {errors.message && (
+                <p className="mt-2 text-sm text-red-400 flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  {errors.message}
+                </p>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <button 
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full px-10 py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl text-lg shadow-2xl hover:shadow-indigo-500/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
+            >
+              {/* Ripple effect */}
+              <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+              
+              <span className="relative flex items-center justify-center gap-3">
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    Send Message
+                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </>
+                )}
+              </span>
+            </button>
+          </form>
+
+          {/* Privacy Note */}
+          <div className="mt-8 pt-6 border-t border-slate-700/50">
+            <div className="flex items-start gap-3 text-sm text-slate-400">
+              <svg className="w-5 h-5 text-indigo-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              <p>
+                <span className="font-semibold text-slate-300">Your info is secure</span> — SQLGuru will never share or misuse your details. We respect your privacy and only use your information to respond to your inquiry.
+              </p>
+            </div>
+          </div>
+
+          {/* Additional Contact Info */}
+          <div className="mt-8 pt-6 border-t border-slate-700/50">
+            <p className="text-center text-sm text-slate-400 mb-4">Prefer to reach us directly?</p>
+            <div className="flex flex-wrap justify-center items-center gap-6 text-sm">
+              <a href="mailto:contact@sqlguru.com" className="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                contact@sqlguru.com
+              </a>
+              <span className="text-slate-600">•</span>
+              <a href="mailto:partnerships@sqlguru.com" className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                partnerships@sqlguru.com
+              </a>
             </div>
           </div>
         </div>
